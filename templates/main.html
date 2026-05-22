@@ -787,7 +787,7 @@
                     text: 'MAU',
                     emoji: '💕😊',
                     responseId: 'responseYes',
-                    followUp: 'Aku mau menjadi bagian dari hidupmu'
+                    followUp: 'Aku nggak ingin cuma jadi kenangan. Aku mau menjadi bagian dari hidupmu — hadir di hari-harimu, tertawa bareng, diam bareng, menghadapi semuanya bersama'
                 },
                 no: {
                     text: 'TIDAK MAU',
@@ -807,9 +807,9 @@
             
             // Build WhatsApp message
             const message = encodeURIComponent(
-                `*🔔 JAWABAN MASUK — APEX APPLICATION* ${selected.emoji}\n\n` +
+                `*🔔 APEX APPLICATION* ${selected.emoji}\n\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n` +
-                `👤 Dari: *${CONFIG.recipientName}*\n` +
+                `👤 Untuk: *${CONFIG.recipientName}*\n` +
                 `💌 Jawaban: *${selected.text}*\n` +
                 `🕐 Waktu: ${new Date().toLocaleString('id-ID')}\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n\n` +
