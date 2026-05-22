@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <title>Apex Application</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      color: white;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100dvh;
+    }
+    .hero {
+      height: 100dvh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .content {
+      text-align: center;
+      z-index: 2;
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      pointer-events: none;
+    }
+    .apex {
+      font-size: clamp(3rem, 12vw, 7.5rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      background: linear-gradient(90deg, #ffaa00, #ffffff, #ff8800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 70px rgba(255, 140, 0, 0.9);
+    }
+    .subtitle {
+      font-size: clamp(1rem, 4vw, 2rem);
+      margin-top: 10px;
+      letter-spacing: 6px;
+      opacity: 0.85;
+      color: #ffcc88;
+    }
+    .redirect-notice {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      color: #ffaa77;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <canvas id="canvas"></canvas>
+    
+    <div class="content">
+      <h1 class="apex" id="title">APEX</h1>
+      <p class="subtitle">APPLICATION</p>
+    </div>
+  </section>
+
+  <div class="redirect-notice">
+    Redirecting in <span id="countdown">10</span>s...
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    let time = 0;
+    let mouse = { x: 0, y: 0 };
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    // ==================== 3D BLACK HOLE ENGINE ====================
+
+    function drawBlackHole3D() {
+      const cx = width / 2;
+      const cy = height / 2;
+      const scale = Math.min(width, height) / 1000;
+      
+      // Mouse tilt effect for 3D perspective
+      const tiltX = (mouse.x - cx) / width * 0.3;
+      const tiltY = (mouse.y - cy) / height * 0.2;
+
+      // === LAYER 1: DISTANT STAR FIELD (Gravitational Lensing) ===
+      drawGravitationalLensing(cx, cy, scale, tiltX, tiltY);
+
+      // === LAYER 2: OUTER PHOTON SPHERE GLOW ===
+      drawOuterGlow(cx, cy, scale, time);
+
+      // === LAYER 3: ACCRETION DISK (3D Tilted) ===
+      drawAccretionDisk3D(cx, cy, scale, tiltX, tiltY, time);
+
+      // === LAYER 4: INNER PHOTON RING ===
+      drawPhotonRing(cx, cy, scale, time);
+
+      // === LAYER 5: EVENT HORIZON ===
+      drawEventHorizon(cx, cy, scale);
+
+      // === LAYER 6: RELATIVISTIC JETS ===
+      drawRelativisticJets(cx, cy, scale, tiltX, tiltY, time);
+    }
+
+    // --- Gravitational Lensing: Stars bend around black hole ---
+    function drawGravitationalLensing(cx, cy, scale, tiltX, tiltY) {
+      const horizonRadius = 70 * scale;
+      const lensRadius = 400 * scale;
+      
+      // Create distorted star field
+      const numStars = 200;
+      
+      for (let i = 0; i < numStars; i++) {
+        const angle = (i / numStars) * Math.PI * 2 + time * 0.001;
+        const baseDist = 150 + (i % 5) * 80;
+        
+        // Gravitational distortion: stars closer to horizon get pulled
+        const distFromCenter = baseDist * scale;
+        const distortionStrength = Math.max(0, 1 - (distFromCenter - horizonRadius) / (lensRadius - horizonRadius));
+        const distortedAngle = angle + distortionStrength * 0.5;
+        const distortedDist = distFromCenter + distortionStrength * 30 * scale;
+        
+        const x = cx + Math.cos(distortedAngle) * distortedDist;
+        const y = cy + Math.sin(distortedAngle) * distortedDist * 0.6; // Elliptical perspective
+        
+        // Brightness increases near horizon (Einstein ring effect)
+        const brightness = 0.3 + distortionStrength * 0.7;
+        const starSize = (0.5 + distortionStrength * 2) * scale;
+        
+        ctx.save();
+        ctx.globalAlpha = brightness * 0.6;
+        ctx.fillStyle = distortionStrength > 0.8 ? '#ffeeaa' : '#aaccff';
+        ctx.shadowBlur = distortionStrength * 10;
+        ctx.shadowColor = '#ffdd88';
+        ctx.beginPath();
+        ctx.arc(x, y, starSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // --- Outer Glow: Gravitational redshift effect ---
+    function drawOuterGlow(cx, cy, scale, time) {
+      const maxRadius = 500 * scale;
+      
+      // Multiple layers of glow for depth
+      for (let i = 5; i >= 0; i--) {
+        const radius = 100 + i * 80;
+        const alpha = 0.03 - i * 0.005;
+        const gradient = ctx.createRadialGradient(cx, cy, radius * 0.5 * scale, cx, cy, radius * scale);
+        
+        // Redshift: outer = red, inner = orange
+        gradient.addColorStop(0, `rgba(255, 200, 100, ${alpha})`);
+        gradient.addColorStop(0.5, `rgba(255, 120, 40, ${alpha * 0.8})`);
+        gradient.addColorStop(1, 'rgba(100, 30, 0, 0)');
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // --- 3D Accretion Disk with Doppler Beaming ---
+    function drawAccretionDisk3D(cx, cy, scale, tiltX, tiltY, time) {
+      const innerR = 75 * scale;
+      const outerR = 320 * scale;
+      const tilt = 0.15 + tiltY; // Disk tilt angle
+      
+      ctx.save();
+      ctx.translate(cx, cy);
+      
+      // Rotate disk slowly
+      ctx.rotate(time * 0.008);
+      
+      // Create 3D elliptical disk
+      ctx.scale(1, Math.cos(tilt));
+      
+      // Draw disk in segments for Doppler effect
+      const segments = 60;
+      
+      for (let i = 0; i < segments; i++) {
+        const angle = (i / segments) * Math.PI * 2;
+        const nextAngle = ((i + 1) / segments) * Math.PI * 2;
+        
+        // Doppler beaming: approaching side (left) is brighter/bluer
+        // Receding side (right) is dimmer/redder
+        const doppler = Math.cos(angle); // -1 (receding) to 1 (approaching)
+        const dopplerIntensity = (doppler + 1) / 2; // 0 to 1
+        
+        // Color: approaching = white/blue-hot, receding = red/dark
+        const r = Math.floor(255);
+        const g = Math.floor(100 + dopplerIntensity * 155);
+        const b = Math.floor(dopplerIntensity * 100);
+        const alpha = 0.4 + dopplerIntensity * 0.5;
+        
+        // Temperature gradient: inner = hotter (white), outer = cooler (orange)
+        const tempGradient = ctx.createRadialGradient(0, 0, innerR, 0, 0, outerR);
+        tempGradient.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+        tempGradient.addColorStop(0.3, `rgba(${r}, ${g}, ${b}, ${alpha * 0.9})`);
+        tempGradient.addColorStop(1, `rgba(180, 60, 0, ${alpha * 0.3})`);
+        
+        ctx.fillStyle = tempGradient;
+        
+        // Draw disk segment
+        ctx.beginPath();
+        ctx.arc(0, 0, outerR, angle, nextAngle);
+        ctx.arc(0, 0, innerR, nextAngle, angle, true);
+        ctx.closePath();
+        ctx.fill();
+      }
+      
+      // Bright inner edge (ISCO - Innermost Stable Circular Orbit)
+      ctx.strokeStyle = 'rgba(255, 255, 220, 0.8)';
+      ctx.lineWidth = 3 * scale;
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#ffdd88';
+      ctx.beginPath();
+      ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      ctx.restore();
+    }
+
+    // --- Photon Ring: Light orbiting the black hole ---
+    function drawPhotonRing(cx, cy, scale, time) {
+      const ringRadius = 72 * scale;
+      
+      // Multiple photon rings for realism
+      for (let ring = 0; ring < 3; ring++) {
+        const radius = ringRadius + ring * 4 * scale;
+        const alpha = 0.6 - ring * 0.15;
+        const glow = 30 - ring * 8;
+        
+        ctx.save();
+        ctx.strokeStyle = `rgba(255, 240, 200, ${alpha})`;
+        ctx.lineWidth = (4 - ring) * scale;
+        ctx.shadowBlur = glow;
+        ctx.shadowColor = '#ffeebb';
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+      
+      // Einstein ring: bright spot where photon ring is strongest
+      const brightSpotAngle = time * 0.02;
+      const brightX = cx + Math.cos(brightSpotAngle) * ringRadius;
+      const brightY = cy + Math.sin(brightSpotAngle) * ringRadius * 0.6;
+      
+      ctx.save();
+      ctx.globalAlpha = 0.8;
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowBlur = 40;
+      ctx.shadowColor = '#ffdd88';
+      ctx.beginPath();
+      ctx.arc(brightX, brightY, 3 * scale, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // --- Event Horizon: The point of no return ---
+    function drawEventHorizon(cx, cy, scale) {
+      const radius = 65 * scale;
+      
+      // Pure black sphere
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Subtle rim light (Hawking radiation glow)
+      const rimGradient = ctx.createRadialGradient(
+        cx - radius * 0.3, cy - radius * 0.3, radius * 0.1,
+        cx, cy, radius
+      );
+      rimGradient.addColorStop(0, 'rgba(255, 200, 150, 0.15)');
+      rimGradient.addColorStop(0.5, 'rgba(255, 100, 30, 0.05)');
+      rimGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      
+      ctx.fillStyle = rimGradient;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // --- Relativistic Jets: Energy beams from poles ---
+    function drawRelativisticJets(cx, cy, scale, tiltX, tiltY, time) {
+      const jetLength = Math.max(width, height) * 0.6;
+      const jetWidth = 8 * scale;
+      const pulse = Math.sin(time * 0.05) * 0.3 + 0.7;
+      
+      // Jet glow
+      const jetGlow = ctx.createLinearGradient(cx, cy - jetLength, cx, cy + jetLength);
+      jetGlow.addColorStop(0, `rgba(255, 200, 100, ${0.15 * pulse})`);
+      jetGlow.addColorStop(0.4, 'rgba(255, 150, 50, 0)');
+      jetGlow.addColorStop(0.6, 'rgba(255, 150, 50, 0)');
+      jetGlow.addColorStop(1, `rgba(255, 200, 100, ${0.15 * pulse})`);
+      
+      ctx.fillStyle = jetGlow;
+      ctx.beginPath();
+      ctx.moveTo(cx - jetWidth * 3, cy);
+      ctx.lineTo(cx - jetWidth, cy - jetLength);
+      ctx.lineTo(cx + jetWidth, cy - jetLength);
+      ctx.lineTo(cx + jetWidth * 3, cy);
+      ctx.lineTo(cx + jetWidth, cy + jetLength);
+      ctx.lineTo(cx - jetWidth, cy + jetLength);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Bright jet cores
+      for (let pole = -1; pole <= 1; pole += 2) {
+        const jetY = cy + pole * jetLength * 0.3;
+        const coreGradient = ctx.createRadialGradient(cx, jetY, 0, cx, jetY, jetWidth * 4);
+        coreGradient.addColorStop(0, `rgba(255, 255, 255, ${0.9 * pulse})`);
+        coreGradient.addColorStop(0.3, `rgba(255, 200, 100, ${0.4 * pulse})`);
+        coreGradient.addColorStop(1, 'rgba(255, 150, 50, 0)');
+        
+        ctx.fillStyle = coreGradient;
+        ctx.beginPath();
+        ctx.arc(cx, jetY, jetWidth * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // ==================== FALLING PARTICLES ====================
+    let particles = [];
+
+    class SpaghettifiedParticle {
+      constructor() {
+        this.reset();
+      }
+      
+      reset() {
+        const angle = Math.random() * Math.PI * 2;
+        const startDist = 200 + Math.random() * 400;
+        this.x = width/2 + Math.cos(angle) * startDist;
+        this.y = height/2 + Math.sin(angle) * startDist;
+        this.size = Math.random() * 2 + 0.5;
+        this.speed = 1 + Math.random() * 2;
+        this.hue = 25 + Math.random() * 15; // Orange-yellow range
+        this.trail = [];
+        this.maxTrail = 8;
+      }
+      
+      update() {
+        const dx = width/2 - this.x;
+        const dy = height/2 - this.y;
+        const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        
+        // Gravitational acceleration increases as we get closer
+        const gravity = 2000 / (dist * dist + 100);
+        const angle = Math.atan2(dy, dx);
+        
+        this.x += Math.cos(angle) * (this.speed + gravity);
+        this.y += Math.sin(angle) * (this.speed + gravity);
+        
+        // Spaghettification: particles stretch vertically near horizon
+        if (dist < 150) {
+          this.y += (Math.random() - 0.5) * (150 - dist) * 0.1;
+        }
+        
+        // Trail
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > this.maxTrail) this.trail.shift();
+        
+        // Reset if swallowed
+        if (dist < 65) this.reset();
+      }
+      
+      draw() {
+        // Draw trail
+        if (this.trail.length > 1) {
+          ctx.save();
+          ctx.strokeStyle = `hsla(${this.hue}, 100%, 75%, 0.3)`;
+          ctx.lineWidth = this.size * 0.5;
+          ctx.beginPath();
+          ctx.moveTo(this.trail[0].x, this.trail[0].y);
+          for (let i = 1; i < this.trail.length; i++) {
+            ctx.lineTo(this.trail[i].x, this.trail[i].y);
+          }
+          ctx.stroke();
+          ctx.restore();
+        }
+        
+        // Draw particle
+        ctx.save();
+        ctx.globalAlpha = 0.8;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = `hsl(${this.hue}, 100%, 70%)`;
+        ctx.fillStyle = `hsl(${this.hue}, 100%, 90%)`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.floor(Math.min(width * height / 6000, 150));
+      for (let i = 0; i < count; i++) {
+        particles.push(new SpaghettifiedParticle());
+      }
+    }
+
+    // ==================== MAIN LOOP ====================
+    function animate() {
+      // Fade trail effect
+      ctx.fillStyle = 'rgba(2, 1, 8, 0.2)';
+      ctx.fillRect(0, 0, width, height);
+      
+      // Draw 3D black hole
+      drawBlackHole3D();
+      
+      // Draw particles
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      
+      time++;
+      requestAnimationFrame(animate);
+    }
+
+    // ==================== GSAP + REDIRECT ====================
+    gsap.from("#title", { y: 120, opacity: 0, duration: 2.5, ease: "power4.out" });
+    gsap.from(".subtitle", { y: 80, opacity: 0, duration: 2, delay: 0.8, ease: "power3.out" });
+
+    let countdown = 10;
+    const countdownEl = document.getElementById('countdown');
+    setInterval(() => {
+      countdown--;
+      countdownEl.textContent = countdown;
+      if (countdown <= 0) window.location.href = "templates/main.html";
+    }, 1000);
+
+    function init() {
+      resize();
+      initParticles();
+      animate();
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

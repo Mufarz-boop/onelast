@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>Shape of My Heart — Untuk Nayshila</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --gold: #d4af37;
+            --pink: #e879a8;
+            --dark: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --light-gray: #888;
+            --white: #ffffff;
+        }
+
+        html {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        html::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            min-height: 100dvh;
+            overflow-x: hidden;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== STARS BACKGROUND ===== */
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 700px;
+            padding: 60px 24px 80px;
+        }
+
+        /* ===== HEADER ===== */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--gold), var(--pink), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .page-subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: var(--pink);
+            opacity: 0.7;
+        }
+
+        /* ===== LOVE LETTER CARD ===== */
+        .letter-card {
+            background: rgba(20, 18, 14, 0.7);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .letter-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.05);
+        }
+
+        .letter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--pink), var(--gold), transparent);
+            opacity: 0.6;
+        }
+
+        .letter-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--pink), var(--gold), var(--pink), transparent);
+            opacity: 0.4;
+        }
+
+        /* Letter Header */
+        .letter-header {
+            padding: 48px 48px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+            position: relative;
+        }
+
+        .letter-ornament {
+            font-size: 32px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            14% { transform: scale(1.1); opacity: 0.8; }
+            28% { transform: scale(1); opacity: 0.6; }
+            42% { transform: scale(1.1); opacity: 0.8; }
+            70% { transform: scale(1); opacity: 0.6; }
+        }
+
+        .letter-date {
+            font-family: 'Caveat', cursive;
+            font-size: 18px;
+            color: var(--pink);
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .letter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .letter-subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: var(--gold);
+            opacity: 0.7;
+        }
+
+        /* Letter Body */
+        .letter-body {
+            padding: 40px 48px;
+            font-size: 15px;
+            line-height: 2.2;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .letter-body p {
+            margin-bottom: 20px;
+            text-align: justify;
+            text-indent: 2em;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease;
+        }
+
+        .letter-body p.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .letter-body p:first-child {
+            text-indent: 0;
+        }
+
+        .letter-body .highlight {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .letter-body .highlight-pink {
+            color: var(--pink);
+            font-weight: 500;
+        }
+
+        .letter-verse {
+            font-family: 'Caveat', cursive;
+            font-size: 22px;
+            color: var(--pink);
+            text-align: center;
+            margin: 32px 0;
+            padding: 24px 28px;
+            background: rgba(232, 121, 168, 0.04);
+            border-left: 3px solid var(--pink);
+            border-right: 3px solid var(--pink);
+            border-radius: 4px;
+            line-height: 1.8;
+            position: relative;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease;
+        }
+
+        .letter-verse.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .letter-verse::before,
+        .letter-verse::after {
+            content: '"';
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            color: var(--gold);
+            opacity: 0.3;
+            position: absolute;
+        }
+
+        .letter-verse::before {
+            top: 8px;
+            left: 12px;
+        }
+
+        .letter-verse::after {
+            bottom: -8px;
+            right: 12px;
+        }
+
+        .letter-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 32px 0;
+            color: var(--gold);
+            opacity: 0.3;
+        }
+
+        .letter-divider::before,
+        .letter-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        /* Letter Footer */
+        .letter-footer {
+            padding: 32px 48px 48px;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.08);
+        }
+
+        .signature-area {
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease;
+        }
+
+        .signature-area.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .signature-line {
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+            color: var(--gold);
+            margin-bottom: 8px;
+            transform: rotate(-2deg);
+            display: inline-block;
+        }
+
+        .signature-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            color: var(--white);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .closing-quote {
+            font-family: 'Caveat', cursive;
+            font-size: 18px;
+            color: var(--pink);
+            opacity: 0.6;
+            margin-top: 20px;
+        }
+
+        .letter-stamp {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(212, 175, 55, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            opacity: 0.2;
+            transform: rotate(-15deg);
+        }
+
+        /* ===== QUESTION AREA ===== */
+        .question-area {
+            text-align: center;
+            margin-top: 48px;
+            padding: 32px;
+            background: rgba(20, 18, 14, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .question-area.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question-area h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .question-area p {
+            color: var(--light-gray);
+            font-size: 1rem;
+            margin-bottom: 28px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, var(--gold), #c9a02a);
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-yes:hover {
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .btn-no {
+            background: transparent;
+            color: var(--light-gray);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .btn-no:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            color: #aa9988;
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+        /* ===== RESPONSE ===== */
+        .response {
+            display: none;
+            text-align: center;
+            padding: 32px;
+            border-radius: 20px;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            margin-top: 24px;
+        }
+
+        .response.active {
+            display: block;
+            animation: fadeUp 0.5s ease;
+        }
+
+        .response h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 1.4rem;
+            margin-bottom: 14px;
+        }
+
+        .response p {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+            line-height: 1.9;
+        }
+
+        .response .wa-notice {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            border-radius: 10px;
+            color: #25d366;
+            font-size: 0.85rem;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: #443322;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 40px 16px 60px;
+            }
+
+            .letter-header {
+                padding: 36px 24px 20px;
+            }
+
+            .letter-body {
+                padding: 28px 24px;
+                font-size: 14px;
+                line-height: 2;
+            }
+
+            .letter-verse {
+                font-size: 19px;
+                padding: 20px 24px;
+            }
+
+            .letter-footer {
+                padding: 28px 24px 36px;
+            }
+
+            .signature-line {
+                font-size: 28px;
+            }
+
+            .question-area {
+                padding: 24px;
+            }
+        }
+
+        /* ===== REDUCED MOTION ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .letter-body p,
+            .letter-verse,
+            .signature-area {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="stars"></canvas>
+
+    <div class="main-content">
+
+        <div class="page-header">
+            <h1 class="page-title">Shape of My Heart</h1>
+            <p class="page-subtitle">Sebuah surat untuk Nayshila Putri</p>
+        </div>
+
+        <!-- Love Letter -->
+        <div class="letter-card">
+            <div class="letter-header">
+                <div class="letter-ornament">💌</div>
+                <div class="letter-date">22 Mei 2026</div>
+                <h2 class="letter-title">Kedalaman Hatiku</h2>
+                <div class="letter-subtitle">Surat ini berisi pernyataan yang belum sempat kuucapkan</div>
+            </div>
+
+            <div class="letter-body" id="letterBody">
+                <p>Hai <span class="highlight">Nayshila</span>,</p>
+
+                <p>
+                    Aku menulis ini bukan karena berharap kamu akan membacanya. Aku menulis ini karena 
+                    <span class="highlight">hatiku terlalu penuh</span> dan lidahku terlalu kaku untuk mengucapkannya.
+                </p>
+
+                <p>
+                    Aku masih ingat hari pertama kali mata kita bertemu. Bukan karena ada kejadian besar, 
+                    tapi karena ada <span class="highlight-pink">kilatan cahaya kecil</span> yang menyala di sudut 
+                    hatiku yang sudah lama gelap.
+                </p>
+
+                <div class="letter-verse" id="verse1">
+                    Di mana mimpi membangun imajinasi dan kreativitas dengan gemuruh angin beraroma bunga api mistis,
+                    menghancurkan tembok logika hingga berkeping-keping, meledakkan warna pelangi liar di mata.
+                </div>
+
+                <p>
+                    Semakin hari, semakin aku yakin bahwa perasaan ini nyata. Bahwa ada sesuatu yang istimewa 
+                    tentang dirimu yang membuatku ingin menulis, ingin bercerita, ingin 
+                    <span class="highlight">menciptakan seluruh dunia</span> hanya untuk menyimpan perasaanku.
+                </p>
+
+                <div class="letter-divider">✦ ✧ ✦</div>
+
+                <p>
+                    Aku sering terjaga di malam hari. Bukan karena insomnia, tapi karena pikiranku terlalu sibuk 
+                    mengingat hal-hal kecil tentangmu. Cara kamu tersenyum. Cara kamu menyipitkan mata saat bingung. 
+                    Cara kamu mengatakan <span class="highlight-pink">"hmm"</span> saat sedang berpikir.
+                </p>
+
+                <p>
+                    Aku tahu aku bukan siapa-siapa. Aku tahu mungkin aku hanya bayangan yang lewat. 
+                    Tapi bayangan ini ingin sekali <span class="highlight-pink">tinggal sedikit lebih lama</span> 
+                    di hidupmu.
+                </p>
+
+                <div class="letter-verse" id="verse2">
+                    Kamu mungkin tidak akan pernah membaca ini. Tapi kalau suatu hari kamu menemukan website ini 
+                    dan bertanya-tanya siapa yang membuatnya... jawabannya adalah seseorang yang pernah sangat, 
+                    sangat menyukaimu.
+                </div>
+
+                <p>
+                    Aku tidak meminta kamu mencintaiku balik. Aku hanya ingin kamu tahu bahwa ada seseorang 
+                    di luar sana yang benar-benar peduli. Yang benar-benar mengagumi dirimu apa adanya. 
+                    <span class="highlight">Tanpa syarat. Tanpa batas waktu. Tanpa harapan balasan.</span>
+                </p>
+
+                <p>
+                    Mungkin aku tidak bisa mengatakannya langsung kepadamu. Tapi di dunia ini, 
+                    aku bisa menjadi siapapun yang berani menyatakan perasaan. Dan hari ini, 
+                    <span class="highlight-pink">aku memilih untuk jujur</span> — meskipun hanya di balik layar.
+                </p>
+
+                <div class="letter-divider">✦ ✧ ✦</div>
+
+                <p>
+                    Terima kasih sudah menjadi alasan aku menulis. Terima kasih sudah menjadi alasan aku tersenyum. 
+                    Terima kasih sudah ada, meskipun mungkin tidak pernah untukku. 
+                    Bagiku, <span class="highlight">mencintaimu dalam diam</span> sudah cukup membuat hidupku berarti.
+                </p>
+
+                <p>
+                    Kamu adalah <span class="highlight-pink">fiksi terindah</span> yang pernah menjadi nyata. 
+                    Dan aku akan selalu berterima kasih atas itu.
+                </p>
+            </div>
+
+            <div class="letter-footer">
+                <div class="signature-area" id="signatureArea">
+                    <div class="signature-line">Aku</div>
+                    <div class="signature-name">Seseorang yang Mencintaimu</div>
+                </div>
+                <div class="closing-quote">
+                    "Jika tidak denganmu, maka tidak dengan siapapun."
+                </div>
+                <div class="letter-stamp">🤍</div>
+            </div>
+        </div>
+
+        <!-- Question -->
+        <div class="question-area" id="questionArea">
+            <h2>Nayshila Putri</h2>
+            <p>Aku menyukaimu. Lebih dari sekadar teman.<br>Maukah kamu menjadi bagian dari hidupku?</p>
+            <div class="buttons">
+                <!-- Tombol "Mau" akan kirim WA otomatis -->
+                <a href="#" class="btn btn-yes" id="btnYes" onclick="answer('yes')">Mau</a>
+                <!-- Tombol "Beri waktu" akan kirim WA otomatis -->
+                <a href="#" class="btn btn-no" id="btnNo" onclick="answer('no')">Beri waktu</a>
+            </div>
+        </div>
+
+        <div class="response" id="responseYes">
+            <h3>Terima kasih, Nayshila</h3>
+            <p>Kamu baru saja membuatku menjadi orang yang paling bahagia. Aku berjanji akan selalu berusaha menjadi yang terbaik untukmu.</p>
+            <div class="wa-notice">✓ Pesan telah dikirim ke WhatsApp</div>
+        </div>
+
+        <div class="response" id="responseNo">
+            <h3>Tidak apa-apa</h3>
+            <p>Aku mengerti. Yang terpenting kamu bahagia. Terima kasih sudah menjadi dirimu yang istimewa.</p>
+            <div class="wa-notice">✓ Pesan telah dikirim ke WhatsApp</div>
+        </div>
+
+    </div>
+
+    <div class="footer">Untuk Nayshila Putri — Shape of My Heart</div>
+
+    <script>
+        // ============================================
+        // KONFIGURASI — UBAH NOMOR WA KAMU DI SINI
+        // ============================================
+        const CONFIG = {
+            // Format: 62xxxxxxxxxx (tanpa +, tanpa spasi, tanpa 0 di depan)
+            // Contoh: 6281234567890
+            waNumber: '6281234567890',  // ← GANTI DENGAN NOMOR WA KAMU
+            
+            // Nama pengirim (muncul di pesan WA)
+            senderName: 'Afdal',
+            
+            // Nama penerima
+            recipientName: 'Nayshila Putri'
+        };
+
+        // ============================================
+        // STARS BACKGROUND
+        // ============================================
+        const canvas = document.getElementById('stars');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        for (let i = 0; i < 50; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 1.2 + 0.3,
+                speed: Math.random() * 0.1 + 0.03,
+                brightness: Math.random() * 0.5 + 0.2,
+                twinkleSpeed: Math.random() * 0.002 + 0.001
+            });
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(s => {
+                s.y -= s.speed;
+                if (s.y < 0) {
+                    s.y = canvas.height;
+                    s.x = Math.random() * canvas.width;
+                }
+
+                const twinkle = Math.sin(Date.now() * s.twinkleSpeed) * 0.3 + 0.7;
+
+                ctx.save();
+                ctx.globalAlpha = s.brightness * twinkle;
+                ctx.fillStyle = '#d4af37';
+                ctx.shadowBlur = s.size * 3;
+                ctx.shadowColor = 'rgba(212, 175, 55, 0.5)';
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // ============================================
+        // SCROLL REVEAL
+        // ============================================
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.letter-body p').forEach(p => observer.observe(p));
+        document.querySelectorAll('.letter-verse').forEach(v => observer.observe(v));
+        observer.observe(document.getElementById('signatureArea'));
+
+        // Show question after scroll
+        const letterBody = document.getElementById('letterBody');
+        const questionArea = document.getElementById('questionArea');
+
+        function checkScroll() {
+            const scrollBottom = window.innerHeight + window.scrollY;
+            const bodyBottom = letterBody.offsetTop + letterBody.offsetHeight;
+
+            if (scrollBottom >= bodyBottom - 100) {
+                questionArea.classList.add('show');
+                window.removeEventListener('scroll', checkScroll);
+            }
+        }
+
+        window.addEventListener('scroll', checkScroll);
+        setTimeout(checkScroll, 500);
+
+        // ============================================
+        // WHATSAPP AUTO SEND
+        // ============================================
+        function answer(type) {
+            const isYes = type === 'yes';
+            const answerText = isYes ? 'MAU' : 'BERI WAKTU';
+            const emotion = isYes ? '😊💕' : '😔💝';
+            
+            // Build WhatsApp message
+            const message = encodeURIComponent(
+                `*APEX APPLICATION - JAWABAN MASUK* ${emotion}\n\n` +
+                `Dari: ${CONFIG.recipientName}\n` +
+                `Jawaban: *${answerText}*\n\n` +
+                `Waktu: ${new Date().toLocaleString('id-ID')}\n\n` +
+                `---\n` +
+                `Pesan dari ${CONFIG.senderName}: ` +
+                `Terima kasih sudah membuka suratku, Nayshila. ` +
+                (isYes 
+                    ? 'Kamu membuatku menjadi orang yang paling bahagia hari ini.' 
+                    : 'Aku mengerti dan akan selalu menghargai keputusanmu.')
+            );
+
+            // Open WhatsApp with pre-filled message
+            const waUrl = `https://wa.me/${CONFIG.waNumber}?text=${message}`;
+            window.open(waUrl, '_blank');
+
+            // Show response on page
+            questionArea.style.display = 'none';
+            document.getElementById(isYes ? 'responseYes' : 'responseNo').classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
