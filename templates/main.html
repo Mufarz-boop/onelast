@@ -535,8 +535,22 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
+
+    <!-- Background Music -->
+    <audio id="bgMusic" autoplay loop>
+        <source src="" type="audio/mpeg">
+        <!-- Fallback: another romantic piano track -->
+        <source src="assets/Backstreet Boys - Shape of My Heart (Lyrics).mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Controls -->
+    <div id="musicControls" style="position:fixed;bottom:20px;left:20px;z-index:100;display:flex;align-items:center;gap:8px;background:rgba(20,18,14,0.8);backdrop-filter:blur(12px);padding:10px 16px;border-radius:50px;border:1px solid rgba(212,175,55,0.2);transition:all 0.3s ease;cursor:pointer;" onclick="toggleMusic()">
+        <span id="musicIcon" style="font-size:18px;">🎵</span>
+        <span id="musicText" style="font-family:'Inter',sans-serif;font-size:12px;color:var(--gold);letter-spacing:1px;">Memutar Musik</span>
+    </div>
 
     <canvas id="stars"></canvas>
 
@@ -826,6 +840,55 @@
             questionArea.style.display = 'none';
             document.getElementById(selected.responseId).classList.add('active');
         }
+
+        // ============================================
+        // BACKGROUND MUSIC CONTROLS
+        // ============================================
+        const bgMusic = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+        let isPlaying = true;
+
+        // Try to autoplay (browsers may block, so we handle it)
+        bgMusic.volume = 0.4; // Set volume to 40%
+
+        // Handle autoplay restrictions
+        document.addEventListener('click', function initAudio() {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(() => {});
+            }
+            document.removeEventListener('click', initAudio);
+        }, { once: true });
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicIcon.textContent = '🔇';
+                musicText.textContent = 'Musik Dimatikan';
+                musicText.style.color = '#888';
+            } else {
+                bgMusic.play().catch(() => {});
+                musicIcon.textContent = '🎵';
+                musicText.textContent = 'Memutar Musik';
+                musicText.style.color = 'var(--gold)';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Fade in music on load
+        bgMusic.addEventListener('canplay', () => {
+            bgMusic.volume = 0;
+            let vol = 0;
+            const fadeIn = setInterval(() => {
+                if (vol < 0.4) {
+                    vol += 0.02;
+                    bgMusic.volume = vol;
+                } else {
+                    clearInterval(fadeIn);
+                }
+            }, 100);
+        });
+
     </script>
 
 </body>
