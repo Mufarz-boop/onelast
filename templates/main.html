@@ -377,7 +377,7 @@
         }
 
         .btn {
-            padding: 14px 40px;
+            padding: 14px 32px;
             border-radius: 12px;
             font-size: 0.95rem;
             font-weight: 500;
@@ -411,6 +411,18 @@
             border-color: rgba(212, 175, 55, 0.3);
             color: #aa9988;
             background: rgba(212, 175, 55, 0.03);
+        }
+
+        .btn-think {
+            background: transparent;
+            color: #6688aa;
+            border: 1px solid rgba(100, 150, 200, 0.2);
+        }
+
+        .btn-think:hover {
+            border-color: rgba(100, 150, 200, 0.4);
+            color: #88aacc;
+            background: rgba(100, 150, 200, 0.05);
         }
 
         /* ===== RESPONSE ===== */
@@ -499,6 +511,11 @@
 
             .question-area {
                 padding: 24px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                font-size: 0.9rem;
             }
         }
 
@@ -627,10 +644,9 @@
             <h2>Nayshila Putri</h2>
             <p>Aku menyukaimu. Lebih dari sekadar teman.<br>Maukah kamu menjadi bagian dari hidupku?</p>
             <div class="buttons">
-                <!-- Tombol "Mau" akan kirim WA otomatis -->
-                <a href="#" class="btn btn-yes" id="btnYes" onclick="answer('yes')">Mau</a>
-                <!-- Tombol "Beri waktu" akan kirim WA otomatis -->
-                <a href="#" class="btn btn-no" id="btnNo" onclick="answer('no')">Beri waktu</a>
+                <button class="btn btn-yes" onclick="answer('yes')">Mau 💕</button>
+                <button class="btn btn-no" onclick="answer('no')">Tidak Mau 😔</button>
+                <button class="btn btn-think" onclick="answer('think')">Berpikir 🤔</button>
             </div>
         </div>
 
@@ -646,9 +662,15 @@
             <div class="wa-notice">✓ Pesan telah dikirim ke WhatsApp</div>
         </div>
 
+        <div class="response" id="responseThink">
+            <h3>Aku Mengerti</h3>
+            <p>Tidak masalah kalau kamu butuh waktu untuk berpikir. Aku akan menunggu jawabanmu, kapan pun itu.</p>
+            <div class="wa-notice">✓ Pesan telah dikirim ke WhatsApp</div>
+        </div>
+
     </div>
 
-    <div class="footer">Untuk Nayshila Putri — Shape of My Heart</div>
+    <div class="footer">EVERY CHOICE CREATES A WORLD</div>
 
     <script>
         // ============================================
@@ -656,7 +678,6 @@
         // ============================================
         const CONFIG = {
             // Format: 62xxxxxxxxxx (tanpa +, tanpa spasi, tanpa 0 di depan)
-            // Contoh: 6281234567890
             waNumber: '6283854722182',  // ← GANTI DENGAN NOMOR WA KAMU
             
             // Nama pengirim (muncul di pesan WA)
@@ -757,25 +778,44 @@
         setTimeout(checkScroll, 500);
 
         // ============================================
-        // WHATSAPP AUTO SEND
+        // WHATSAPP AUTO SEND — 3 PILIHAN
         // ============================================
         function answer(type) {
-            const isYes = type === 'yes';
-            const answerText = isYes ? 'MAU' : 'BERI WAKTU';
-            const emotion = isYes ? '😊💕' : '😔💝';
+            // Konfigurasi untuk setiap jawaban
+            const answers = {
+                yes: {
+                    text: 'MAU',
+                    emoji: '💕😊',
+                    responseId: 'responseYes',
+                    followUp: 'Aku mau menjadi bagian dari hidupmu'
+                },
+                no: {
+                    text: 'TIDAK MAU',
+                    emoji: '😔💝',
+                    responseId: 'responseNo',
+                    followUp: 'Aku menghargai perasaanmu, tapi aku tidak mau menjadi pasanganmu'
+                },
+                think: {
+                    text: 'BERPIKIR',
+                    emoji: '🤔💭',
+                    responseId: 'responseThink',
+                    followUp: 'Biarkan aku berpikir dulu'
+                }
+            };
+
+            const selected = answers[type];
             
             // Build WhatsApp message
             const message = encodeURIComponent(
-                `*APEX APPLICATION - JAWABAN MASUK* ${emotion}\n\n` +
-                `Dari: ${CONFIG.recipientName}\n` +
-                `Jawaban: *${answerText}*\n\n` +
-                `Waktu: ${new Date().toLocaleString('id-ID')}\n\n` +
-                `---\n` +
-                `Pesan dari ${CONFIG.senderName}: ` +
-                `Terima kasih sudah membuka suratku, Nayshila. ` +
-                (isYes 
-                    ? 'Kamu membuatku menjadi orang yang paling bahagia hari ini.' 
-                    : 'Aku mengerti dan akan selalu menghargai keputusanmu.')
+                `*🔔 JAWABAN MASUK — APEX APPLICATION* ${selected.emoji}\n\n` +
+                `━━━━━━━━━━━━━━━━━━━━\n` +
+                `👤 Dari: *${CONFIG.recipientName}*\n` +
+                `💌 Jawaban: *${selected.text}*\n` +
+                `🕐 Waktu: ${new Date().toLocaleString('id-ID')}\n` +
+                `━━━━━━━━━━━━━━━━━━━━\n\n` +
+                `💬 Pesan:\n` +
+                `"${selected.followUp}"\n\n` +
+                `— Dari ${CONFIG.senderName}`
             );
 
             // Open WhatsApp with pre-filled message
@@ -784,7 +824,7 @@
 
             // Show response on page
             questionArea.style.display = 'none';
-            document.getElementById(isYes ? 'responseYes' : 'responseNo').classList.add('active');
+            document.getElementById(selected.responseId).classList.add('active');
         }
     </script>
 
